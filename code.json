@@ -1,0 +1,51 @@
+import urllib3, requests, json
+
+# retrieve your iam_service_credentials_username, iam_service_credentials_password, and iam_service_credentials_url from the
+# Service credentials associated with your IBM Cloud.
+
+iam_credentials={
+"url": iam_service_credentials_url,
+"username": iam_service_credentials_username,
+"password": iam_service_credentials_password
+}
+
+headers = urllib3.util.make_headers(basic_auth='{username}:{password}'.format(username=iam_credentials['username'], password=iam_credentials['password']))
+url = '{}/identity/token'.format(iam_credentials['url'])
+response = requests.get(url, headers=headers)
+mltoken = json.loads(response.text).get('token')
+
+header = {'Content-Type': 'application/json', 'Authorization': 'Bearer ' + mltoken}
+
+# NOTE: manually define and pass the array(s) of values to be scored in the next line
+payload_scoring = {"fields": [array_of_input_fields], "values": [array_of_values_to_be_scored, another_array_of_values_to_be_scored]}
+
+response_scoring = requests.post('https://eu-gb.ml.cloud.ibm.com/ml/v4/deployments/ee05c873-16a4-45b9-a48b-01fea2e7ace0/predictions', json=payload_scoring, headers=header)
+print("Scoring response")
+print(json.loads(response_scoring.text))
+
+Show more
+
+
+
+hhhh
+Created
+Oct 13, 2020 1:37 PM
+Updated
+Oct 13, 2020 1:37 PM
+Deployment ID
+ee05c873-16a4-45b9-a48b-01fea2e7ace0
+
+Software specification
+hybrid_0.1
+Hybrid pipeline software specifications
+autoai-kb_3.0-py3.6
+Copies
+1 
+Description
+No description provided.
+Associated asset
+heart - P8 RandomForestRegressorEstimator
+135050f7-89bb-485b-ac31-6fa671b42f5b
+
+
+
